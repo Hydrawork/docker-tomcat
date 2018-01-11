@@ -50,7 +50,7 @@ RUN apk add --no-cache --virtual curl && \
 	| sort -u \
 	)" && \
 	apk add --no-cache --virtual .tomcat-native-rundeps $runDeps && \
-	apk del .native-build-deps && \
+	apk del .native-build-deps curl && \
 	rm -rf "$nativeBuildDir" && \
 	rm bin/tomcat-native.tar.gz && \
 	set -e && \
