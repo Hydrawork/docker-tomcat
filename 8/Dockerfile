@@ -10,13 +10,14 @@ ENV CATALINA_HOME=/usr/local/tomcat \
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$TOMCAT_NATIVE_LIBDIR \
 	TOMCAT_DOWN_URL=http://mirrors.aliyun.com/apache/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
-RUN mkdir -p "$CATALINA_HOME" && \
+RUN apk add --no-cache --virtual curl && \
+	mkdir -p "$CATALINA_HOME" && \
 	cd "$CATALINA_HOME" && \
 	echo "TOMCAT_NATIVE_LIBDIR=$TOMCAT_NATIVE_LIBDIR" && \
 	echo "PATH=$PATH" && \
 	echo "TOMCAT_VERSION=$TOMCAT_VERSION" && \
 	echo "TOMCAT_DOWN_URL=$TOMCAT_DOWN_URL" && \
-	wget -O tomcat.tar.gz "$TOMCAT_DOWN_URL" && \
+	curl -o tomcat.tar.gz "$TOMCAT_DOWN_URL" && \
 	tar -zxf tomcat.tar.gz && \
 	mv apache-tomcat-$TOMCAT_VERSION/* . && \
 	rmdir apache-tomcat-$TOMCAT_VERSION && \
