@@ -3,12 +3,12 @@ FROM hydrawork/java:8
 MAINTAINER Alex Huang <alex@hydra.work>
 
 ENV CATALINA_HOME=/usr/local/tomcat \
-	TOMCAT_MAJOR=8 \
-	TOMCAT_VERSION=8.0.48 \
-	PATH=${CATALINA_HOME}/bin:$PATH \
-	TOMCAT_NATIVE_LIBDIR=${CATALINA_HOME}/native-jni-lib \
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$TOMCAT_NATIVE_LIBDIR \
-	TOMCAT_DOWN_URL=http://mirrors.aliyun.com/apache/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
+        TOMCAT_MAJOR=8 \
+	TOMCAT_VERSION=8.0.48
+        
+ENV PATH=${CATALINA_HOME}/bin:$PATH \
+        TOMCAT_NATIVE_LIBDIR=${CATALINA_HOME}/native-jni-lib \
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}${CATALINA_HOME}/native-jni-lib
 
 RUN apk add --no-cache --virtual curl && \
 	mkdir -p "$CATALINA_HOME" && \
@@ -16,8 +16,7 @@ RUN apk add --no-cache --virtual curl && \
 	echo "TOMCAT_NATIVE_LIBDIR=$TOMCAT_NATIVE_LIBDIR" && \
 	echo "PATH=$PATH" && \
 	echo "TOMCAT_VERSION=$TOMCAT_VERSION" && \
-	echo "TOMCAT_DOWN_URL=$TOMCAT_DOWN_URL" && \
-	curl -o tomcat.tar.gz "$TOMCAT_DOWN_URL" && \
+	curl -o tomcat.tar.gz http://mirrors.aliyun.com/apache/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
 	tar -zxf tomcat.tar.gz && \
 	mv apache-tomcat-$TOMCAT_VERSION/* . && \
 	rmdir apache-tomcat-$TOMCAT_VERSION && \
